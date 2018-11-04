@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+            <title>
+                Document
+            </title>
+            <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" rel="stylesheet">
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+                    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js">
+                    </script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+                    </script>
+                    <script src="script/jcanvas.js">
+                    </script>
+                  
+                    <link href="css/style.css" rel="stylesheet">
+                        <style>
+                            .for-center{
+                        width:460px;
+                        margin: 0 auto;
+                        margin-top: 40px;
+
+                    }
+                     canvas {
+                        margin: 0 auto;
+                        display: block;
+                        border: 10px solid blue;
+                     }
+                     button {
+                        
+                        display: block;
+                        margin: 0 auto;
+                        border: 6px solid blue;
+                        background-color: black;
+                        font-size: 26px;
+                        color:red;
+                        display: block;
+                     }
+                        </style>
+                    </link>
+                </link>
+            </link>
+        </meta>
+    </head>
+    <body>
+        <div class="for-center">
+            <canvas height="40" id="msg" width="350">
+            </canvas>
+            <canvas height="440" id="gc" width="440">
+            </canvas>
+            <button>
+                New Game
+            </button>
+        </div>
+        <script>
+            $(function(){   
+
+
+
+
+            function Cube(x,y,ht,wt,color){
+                      this.x     = x;          // stexcum  enq karmir kubiknery 
+                      this.y     = y;         
+                      this.ht    = ht;         
+                      this.wt    = wt;
+                      this.color = color;
+                      this.drowGame = function() {
+                            ctx.fillStyle = this.color||'lime';
+                            ctx.fillRect(this.x,this.y,this.ht,this.wt);
+                      }
+                      
+            };
+            function RedCube(x,y,ht,wt,s,way,color) {  // RedCube class vori mijocov
+                      this.x     = x;          // stexcum  enq karmir kubiknery 
+                      this.y     = y;         
+                      this.ht    = ht;          //erkarutyun
+                      this.ht2   = ht/20;        
+                      this.wt    = wt;          //lajnutyun
+                      this.color = color;
+                      this.s     = s;
+                      this.way   = way;
+                      this.x2    = x ;
+                     
+
+                        if(this.way == 'right' )
+                        {
+                        this.k = 0-this.ht;
+                        }
+                        if(this.way == 'left'){
+                        this.k = canv.width;
+                        }
+                        if(this.way == 'up')
+                        {
+                            this.k=canv.height;
+                        }
+                        if(this.way == 'down')
+                        {
+                             this.k=0-this.wt;
+                        }
+
+
+
+
+                     
+                      this.drowGame = function(){
+                          if(way=='right'){
+                            ctx.fillStyle= this.color ;
+                            ctx.fillRect(this.x+=this.s,this.y,this.ht,this.wt);
+                            
+                               if(this.x+this.ht>canv.width){
+                                
+                                 ctx.fillRect(this.k+=this.s,this.y,this.ht,this.wt);  
+                                 if(this.x>canv.width){
+                                        this.x=this.k;
+                                        this.k=0-this.ht;
+                                     }
+                               } 
+                            
+                          }
+                          if(way=='left'){
+                            ctx.fillStyle= this.color ;
+                            ctx.fillRect(this.x-=this.s,this.y,this.ht,this.wt);
+                            if(this.x<0){
+                                ctx.fillRect(this.k-=this.s,this.y,this.ht,this.wt);  
+                                 if(this.x<0-this.ht){
+                                        this.x = this.k;
+                                        this.k = canv.width;
+                                     }
+                               } 
+                            }
+                          if(way=='down'){
+                            ctx.fillStyle= this.color ;
+                            ctx.fillRect(this.x,this.y+=this.s,this.ht,this.wt);
+
+                             if(this.y+this.wt>canv.width){
+                                
+                                 ctx.fillRect(this.x,this.k+=this.s,this.ht,this.wt);  
+                                 if(this.y>canv.height){
+                                        this.y=this.k;
+                                        this.k=0-this.wt;
+                                     }
+                               } 
+                          }
+                          if(way=='up'){
+                            ctx.fillStyle= this.color ;
+                            ctx.fillRect(this.x,this.y-=this.s,this.ht,this.wt);
+                            if(this.y<0){
+                                
+                                 ctx.fillRect(this.x,this.k-=this.s,this.ht,this.wt);  
+                                 if(this.y+this.wt<0){
+                                        this.y=this.k;
+                                        this.k=canv.height;
+                                     }
+                               } 
+                          }
+                      }                     
+                    }
+                
+                function  Msg(ctxObj,canvW,canvH,fontS) {
+                    this.ctxObj  = ctxObj;         
+                    this.canvW   = canvW;
+                    this.canvH   = canvH;
+                    this.fontS   = fontS;
+
+                this.msgFunc = function(n,color,colorBg){
+                    this.ctxObj.fillStyle=colorBg||'black';
+                    this.ctxObj.fillRect(0,0,this.canvW,this.canvH);
+                    this.ctxObj.font = this.fontS+"px Comic Sans MS";
+                    this.ctxObj.textAlign = "center";
+                    this.ctxObj.fillStyle = color||"red";
+                    this.ctxObj.fillText(n,this.canvW/2,this.canvH/2+10);
+                }
+
+                }
+                  function newGame(){
+                    ctxMsg.fillStyle='black';
+                    ctxMsg.fillRect(0,0,canv.width,canv.height);
+                    ctx.fillStyle='black';
+                    ctx.fillRect(0,0,canv.width,canv.height);
+                    bar           = new Array();
+                    check         = new Array(); 
+                    countWorld    = 1;
+                    n             = 5;
+                    h             = setInterval(game,6);
+                    gamer         = new Cube(0,canv.height-20,20,20);
+                    msgUp         = new Msg(ctxMsg,canvMsg.width,canvMsg.height,30);
+                    msgMain       = new Msg(ctx,canv.width,canv.height,60);
+                   
+                }
+                $('button').click(function() {
+                    newGame();
+                    $('button').css('display', 'none');
+                });
+                
+            canv    =$("#gc")[0];
+            ctx     =canv.getContext("2d");
+            canvMsg =$("#msg")[0];
+            ctxMsg  =canvMsg.getContext("2d");
+
+
+            ctxMsg.fillStyle='black';
+            ctxMsg.fillRect(0,0,canv.width,canv.height);
+            ctx.fillStyle='black';
+            ctx.fillRect(0,0,canv.width,canv.height);
+
+
+         
+
+
+           
+
+
+                $(document).keydown(function (e) {
+            if(n<5){
+                    if(e.keyCode==37){
+                 
+                        if(gamer.x>0){
+                            gamer.x = gamer.x-20;
+                        }
+                    }
+                    if(e.keyCode==38){
+                        if(gamer.y>0){
+                            gamer.y= gamer.y-20;  
+                            }    
+                    }
+                    if(e.keyCode==39){
+                        if(gamer.x<canv.width-20){
+                            gamer.x= gamer.x+20;
+                        }
+                    }
+                    if(e.keyCode==40){
+                         if(gamer.y<canv.height-20){
+                            gamer.y= gamer.y+20;
+                        }
+                    }
+                }else{
+                    return 0;
+                }
+     
+                });
+
+            
+
+                
+
+                 function world(count) {
+
+                        if(count==1){
+                            
+                            bar         = [];
+                            bar[0]      = new RedCube(40,200,40,40,2,'down','red');
+                            bar[1]      = new RedCube(100,200,40,40,2,'up','red');
+                            bar[2]      = new RedCube(160,200,40,40,2,'down','red');
+                            bar[3]      = new RedCube(220,200,40,40,2,'up','red');
+                            bar[4]      = new RedCube(280,200,40,40,2,'down','red');
+                            bar[5]      = new RedCube(340,200,40,40,2,'up','red');
+                            bar[6]      = new RedCube(400,200,40,40,2,'down','red')
+
+                            check       = [];
+                            check[0]    = new Cube(140,200,20,20,'white');
+                            check[1]    = new Cube(200,380,20,20,'white');
+                            check[2]    = new Cube(260,100,20,20,'white');
+                            check[3]    = new Cube(380,340,20,20,'white');
+                            check[4]    = new Cube(0,0,20,20,'white');        
+                            
+                            
+                        }
+                        if(count==2){
+
+                            bar         = [];
+                            bar[0]      = new RedCube(0,40,360,20,1,'left','red');
+                            bar[1]      = new RedCube(0,100,340,20,1,'right','red');
+                            bar[2]      = new RedCube(0,150,300,20,2,'left','red');
+                            bar[3]      = new RedCube(0,200,220,20,2,'right','red');
+                            bar[4]      = new RedCube(0,260,320,20,1,'left','red');
+                            bar[5]      = new RedCube(0,300,200,20,3,'right','red');
+                            bar[6]      = new RedCube(0,340,180,20,1,'left','red');
+                            bar[7]      = new RedCube(0,400,150,20,4,'right','red');
+
+                            check = [];
+                            check[0]    = new Cube(40,80,20,20,'white');
+                            check[1]    = new Cube(340,100,20,20,'white');
+                            check[2]    = new Cube(0,220,20,20,'white');
+                            check[3]    = new Cube(420,300,20,20,'white');
+                            check[4]    = new Cube(420,420,20,20,'white');
+                            
+                        }
+                        if(count == 3){
+                            bar         = [];
+                            bar[0]      = new RedCube(0,40,360,20,1,'left','red');
+                            bar[1]      = new RedCube(0,100,340,20,1,'right','red');
+                            bar[2]      = new RedCube(0,150,300,20,2,'left','red');
+                            bar[3]      = new RedCube(60,0,20,340,1,'up','red');
+                            bar[4]      = new RedCube(100,0,20,340,1,'down','red');
+                            bar[5]      = new RedCube(150,0,20,300,2,'up','red');
+                            bar[6]      = new RedCube(200,0,20,220,2,'down','red');
+
+                            check       = [];
+                            check[0]    = new Cube(40,80,20,20,'white');
+                            check[1]    = new Cube(120,80,20,20,'white');
+                            check[2]    = new Cube(80,120,20,20,'white');
+                            check[3]    = new Cube(180,180,20,20,'white');
+                            check[4]    = new Cube(40,20,20,20,'white');
+
+                        }
+                        if(count == 4){
+
+                            return      'end';
+                        }
+                         return  bar,check;
+
+                }
+
+                
+            
+
+            function forMsg(i){
+                if(0<i){
+            var countG = setInterval(function(){
+                var vcount=countWorld-1
+                msgUp.msgFunc('you are win the'+vcount+' world',"black",'green');
+                msgMain.msgFunc('YOU ARE WIN','black','green')
+                setTimeout(function() {
+                msgUp.msgFunc('');
+                msgMain.msgFunc('');
+                }, 300);
+                 i--;
+                 forMsg(i);
+                 clearInterval(countG);
+            },600);
+            }
+            }
+            function gameOver(i){
+                if(0<i){
+            var countG = setInterval(function(){
+               
+               msgUp.msgFunc('');
+                msgMain.msgFunc('');
+                setTimeout(function() {
+
+                msgUp.msgFunc('game over bro','black','red');
+                msgMain.msgFunc('YOU LOSE','black','red');
+               
+
+                }, 400);
+                 i--;
+                 gameOver(i);
+                 clearInterval(countG);
+            },1000);
+            }else{
+                $('button').css('display', 'block');
+            }
+            }
+                
+          
+
+            function game() {
+
+                ctx.fillStyle='black';
+                ctx.fillRect(0,0,canv.width,canv.height);
+
+                if(n==5){
+                    if(countWorld==1)
+                    {  
+
+                        msgMain.msgFunc('WORDL '+countWorld);
+                        clearInterval(h);
+                        setTimeout(function() {
+                        world(countWorld);
+                         countWorld++;
+                        n=0;
+                        h = setInterval(game,6);
+                        }, 2000);
+                    }
+                    else{
+
+                        clearInterval(h);
+                        msgUp.msgFunc('chekpoint '+n);
+                        setTimeout(function() {
+                        forMsg(4);
+                        }, 200);
+
+                        setTimeout(function() {
+                        if(world(countWorld)=='end'){
+                            msgUp.msgFunc('you won the game','black','green');
+                            msgMain.msgFunc('Congratulations','black','green');
+                             clearInterval(h);
+                             $('button').css('display', 'block');
+                        }else{
+                        msgMain.msgFunc('WORDL '+ countWorld);
+                        setTimeout(function() {
+                        world(countWorld);
+                        countWorld++;
+                        n=0;
+                        h = setInterval(game,6);
+                        }, 1000);
+                        }
+                        }, 3500);
+                    }
+                }else
+                {
+                 msgUp.msgFunc('chekpoint '+n);
+                
+                
+                
+                for (var i = 0; i <bar.length; i++) {
+                    
+                     bar[i].drowGame();
+                if(bar[i].ht>20&&(bar[i].way=='left' || bar[i].way=='right')){
+                    if(((gamer.x>bar[i].x&&gamer.x<bar[i].x+bar[i].ht)||(gamer.x>bar[i].k&&gamer.x<bar[i].k+bar[i].ht-10))&&(gamer.y>=bar[i].y&&gamer.y<bar[i].y+bar[i].wt)){
+
+                           clearInterval(h)
+                            setTimeout(function() {
+                            gameOver(4);
+                        }, 300);
+
+                    }
+                }
+                if(bar[i].wt>20&&(bar[i].way=='up' || bar[i].way=='down')){
+                    if(((gamer.y>bar[i].y&&gamer.y<bar[i].y+bar[i].wt)||(gamer.y>bar[i].k&&gamer.y<bar[i].k+bar[i].wt))&&(gamer.x>=bar[i].x&&gamer.x<bar[i].x+bar[i].ht)){
+                      
+                           clearInterval(h)
+                           setTimeout(function() {
+                            gameOver(4);
+                        }, 300);
+                            
+                    }
+                }   
+            
+                if((gamer.x>=bar[i].x&&gamer.x<bar[i].x+bar[i].ht)&&(gamer.y>=bar[i].y&&gamer.y<bar[i].y+bar[i].wt)){
+                            clearInterval(h);
+                           setTimeout(function() {
+                            gameOver(4);
+                        }, 300);
+
+                }
+                 
+                 if(gamer.x==check[n].x&&gamer.y==check[n].y){
+                     n++;
+                 }
+                
+                 check[n].drowGame();
+
+                gamer.drowGame();   
+
+               }
+         }
+        }
+             });
+        </script>
+    </body>
+</html>
